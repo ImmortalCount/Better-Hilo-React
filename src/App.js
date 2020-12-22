@@ -6,6 +6,7 @@ function App() {
   const [guess, setGuess] = useState("");
   const [count, setCount] = useState(0);
   const [score, setScore] = useState(0);
+  const [hiScore, setHiscore] = useState(0);
   const [display, setDisplay] = useState("");
   const [cards, setCards] = useState([
     1,
@@ -49,7 +50,6 @@ function App() {
 
     13: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Playing_card_spade_K.svg/800px-Playing_card_spade_K.svg.png"
   };
-  const length = _.size(cards);
 
   function Shuffle(cards) {
     return setCards(_.shuffle(cards));
@@ -87,22 +87,29 @@ function App() {
 
   return (
     <div className="App">
-      {count > 0 && <h1> The previous card is {cards[count - 1]}</h1>}
-      <h1> The current card is {cards[count]}</h1>
-      {count > 0 && (
+      {count < 1 && <h1> Welcome to Higher or Lower</h1>}
+      {count < 1 && <h1> Click Shuffle to Begin</h1>}
+      {count > 1 && <h1> The previous card is {cards[count - 1]}</h1>}
+      {count > 0 && <h1> The current card is {cards[count]}</h1>}
+      {count > 1 && (
         <h1>
           {" "}
           You guessed {display} , you were{" "}
           {Correct(guess, Higher(cards, count))}{" "}
         </h1>
       )}
-      {count > 0 && <img src={images[cards[count - 1]]} alt="new" />}
-      <img src={images[cards[count]]} alt="new" />
-      <h1> Is the next one higher or lower? </h1>
-      <h1> {length}</h1>
-      <h1> Your score is {score} </h1>
+      {count > 1 && (
+        <img className="Image" src={images[cards[count - 1]]} alt="new" />
+      )}
+      {count > 0 && (
+        <img className="Image" src={images[cards[count]]} alt="new" />
+      )}
+      {count > 0 && <h1> Is the next one higher or lower? </h1>}
+      {count > 0 && <h1> Your score is {score} </h1>}
+      {count > 0 && <h1> Hiscore: {hiScore} </h1>}
 
       <button
+        className="Button"
         onClick={() => {
           setGuess("H");
           setCount(count + 1);
@@ -113,14 +120,17 @@ function App() {
         Higher
       </button>
       <button
+        className="Button"
         onClick={() => {
           Shuffle(cards);
-          setCount(0);
+          setCount(1);
+          setScore(0);
         }}
       >
         Shuffle
       </button>
       <button
+        className="Button"
         onClick={() => {
           setGuess("L");
           setDisplay("Lower");
